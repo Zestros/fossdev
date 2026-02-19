@@ -1,4 +1,4 @@
-from script import sum, devide
+from script import sum, devide, substruct
 
 def test_sum():
     a=1
@@ -18,6 +18,14 @@ def test_devide_zero():
         raise False
     except:
         print("passed")
+def test_substruct():
+    a = 5
+    b = 3
+    result = 2
+    assert substruct(a,b) == result
+    print("Test substruct passed")
+
 if __name__ == "__main__":
     test_devide()
     test_sum()
+    test_substruct()
