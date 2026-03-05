@@ -32,7 +32,15 @@ def test_addition_duplicate():
     assert add(6,7) == 6+7
     print("test duplicate addetion passed")
 
+def test_addition_overkill():
+    for i in range(0,2**32):
+        for j in range(0,2**64):
+            assert add(i,j) == i+j # violation of duplication
+            assert add(-i,j) == -i -j
+            assert add(-i,-j) == -i -j
+
 if __name__ == '__main__':
     test_addition()
     test_addition_with_bug()
     test_addition_duplicate()
+    #test_addition_overkill()
