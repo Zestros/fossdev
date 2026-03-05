@@ -2,7 +2,7 @@ import unittest
 from tax.income import calculate_tax
 
 class TestTaxCalculator(unittest.TestCase):
-    def test_incoe(self):
+    def test_income(self):
         self.assertEqual(calculate_tax(100),13.0)
 
     def test_integers_cents(self):
