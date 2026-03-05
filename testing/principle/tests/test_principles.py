@@ -15,7 +15,7 @@ import sys
 # Тесты покрывают как успешные так и ощибочные кейсы
 
 
-from math_demo import add, add_with_bug
+from math_demo import add, add_with_bug, calculate_tax_buggged, calculate_tax
 def test_addition():
     assert add(2,2) == 4
     assert add(0,0) == 0
@@ -52,11 +52,30 @@ def test_addition_clusters():
 def test_addition_commutative():
     assert add(9,5) == 14
     assert add(9,5) == 14
-    print("test commutative")
+    print("test commutative passed")
+
+def test_tax_calculator_pesticide():
+    assert calculate_tax_buggged(1000) == 150
+    assert calculate_tax_buggged(100) == 15
+    assert calculate_tax_buggged(10) == 1.5
+    assert calculate_tax_buggged(1) == 0.15
+    assert calculate_tax_buggged(234) == 35.1
+    print("test tax calculator passed")
+
+def test_tax_calculator():
+    assert calculate_tax(1000) == 150
+    assert calculate_tax(100) == 15
+    assert calculate_tax(10) == 1.5
+    assert calculate_tax(1) == 0.15
+    assert calculate_tax(2.34) == 0.35
+    print("test unbugged tax calculator passed")
 
 if __name__ == '__main__':
     test_addition()
-    test_addition_with_bug()
+    #test_addition_with_bug()
     test_addition_duplicate()
     test_addition_clusters()
+    test_addition_commutative()
+    test_tax_calculator_pesticide()
+    test_tax_calculator()
     #test_addition_overkill()
