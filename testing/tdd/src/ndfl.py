@@ -12,7 +12,7 @@ def calculate_ndfl(income):
         if income > start:
             result = (income - start) * taxrate + addition
             return result
-    raise RuntimeError("Idi nahui suka")
+    raise RuntimeError("Error")
 
 
     """
