@@ -85,5 +85,5 @@ if __name__ == '__main__':
     test_addition_commutative()
     test_tax_calculator_pesticide()
     test_tax_calculator()
-    test_negatie_income
+    test_negatie_income()
     #test_addition_overkill()
