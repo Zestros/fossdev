@@ -8,13 +8,20 @@ create-structure:
 	touch docs/DOMAIN.md
 	touch src/.gitkeep tests/.gitkeep
 
-install-dep:
-	pip install -r requirement.txt
+venv:
+	python3 -m venv .venv
+install-dep: venv
+	. .venv/bin/activate && pip install -r requirement.txt
 
-install:
-	pip install -e .
+install: install-dep
+	. .venv/bin/activate && pip install -e .
 
 test-pytest:
-	python -m pytest
+	. .venv/bin/activate && python -m pytest
 
-test: install-dep install test-pytest
+test: venv install-dep install test-pytest
+
+clean:
+	rm -rf .venv
+	find . -type d -name "__pycache__" -exec rm -rf {} +
+	find . -type d -name "*.egg-info" -exec rm -rf {} +
