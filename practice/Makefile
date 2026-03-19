@@ -8,11 +8,3 @@ create-structure:
 	touch docs/DOMAIN.md
 	touch src/.gitkeep tests/.gitkeep
 
-install-dep:
-	pip install -r requirement
-
-install:
-	pip install -e .
-
-test-pytest:
-	python -m pytest

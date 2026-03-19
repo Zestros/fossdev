@@ -9,10 +9,12 @@ create-structure:
 	touch src/.gitkeep tests/.gitkeep
 
 install-dep:
-	pip install -r requirement
+	pip install -r requirement.txt
 
 install:
 	pip install -e .
 
 test-pytest:
 	python -m pytest
+
+test: install-dep install test-pytest
