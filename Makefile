@@ -1,5 +1,5 @@
-help:
-	@echo "This makefile for repo-level activity"
+.DEFAULT_GOAL := help
+
 
 create-practice:
 ifdef PRACTICE
@@ -13,4 +13,7 @@ endif
 
 remove-practice:
 	rm -rf $(PRACTICE)
+
+help:
+	@echo "This makefile for repo-level activity"
 
