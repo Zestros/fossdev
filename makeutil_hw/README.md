@@ -16,6 +16,7 @@
 
 ### With Make
 make install
+make run
 
 ## Available commands
 make help
