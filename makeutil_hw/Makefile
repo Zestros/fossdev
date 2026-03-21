@@ -13,6 +13,8 @@ help:
 	@echo "make install            Install dependencies"
 	@echo "make check-requirements Checking all dependencies"
 	@echo "typecheck               Type checking"
+	@echo "format                  Format code in src"
+	@echo "lint               Lint code in src"
 
 $(VENV)/bin/python:
 	python3 -m venv $(VENV)
@@ -32,3 +34,8 @@ check-requirements: install
 typecheck: install
 	$(PYTHON) -m mypy $(SRC)
 
+format: install
+	$(PYTHON) -m black $(SRC)
+
+lint: install
+	$(PYTHON) -m black --check $(SRC)
