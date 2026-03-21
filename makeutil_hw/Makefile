@@ -14,12 +14,13 @@ help:
 	@echo "make check-requirements Checking all dependencies"
 	@echo "typecheck               Type checking"
 	@echo "format                  Format code in src"
-	@echo "lint               Lint code in src"
+	@echo "lint                    Lint code in src"
+	@echo "check                   Check composition"
 
 $(VENV)/bin/python:
 	python3 -m venv $(VENV)
 
-run:
+run: install
 	$(PYTHON) $(SRC)/app.py
 
 venv: $(VENV)/bin/python
@@ -39,3 +40,8 @@ format: install
 
 lint: install
 	$(PYTHON) -m black --check $(SRC)
+
+check: lint typecheck check-requirements
+
+clean:
+	rm -rf $(VENV)

@@ -3,7 +3,7 @@
 
 ## Structure
 - src/ — исходный код
-- scripts/ — вспомогательные скрипты
+- sub_scripts/ — вспомогательные скрипты
 - Makefile — автоматизация
 
 ## Quick start
