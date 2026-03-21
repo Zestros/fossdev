@@ -11,16 +11,20 @@ help:
 	@echo "Commands:"
 	@echo "make venv               Create venv"
 	@echo "make install            Install dependencies"
-    @echo "make check-requirements Checking all dependencies"
+	@echo "make check-requirements Checking all dependencies"
+	@echo "typecheck               Type checking"
 
 $(VENV)/bin/python:
 	python3 -m venv $(VENV)
 
 venv: $(VENV)/bin/python
 
-install: check-requirements
+install: $(VENV)/bin/python requirements.txt
 	$(PIP) install --upgrade pip
 	$(PIP) install -r requirements.txt
 
-check-requirements: $(VENV)/bin/python requirements.txt
+check-requirements: install
 	$(PYTHON) sub_scripts/check_requirements.py
+
+typecheck: install
+	$(PYTHON) -m mypy $(SRC)
