@@ -5,7 +5,7 @@ PYTHON := $(VENV)/bin/python
 PIP := $(VENV)/bin/pip
 SRC := src
 
-.PHONY: help install
+.PHONY: help install run format lint typecheck check clean
 
 help:
 	@echo "Commands:"
@@ -16,6 +16,9 @@ help:
 
 $(VENV)/bin/python:
 	python3 -m venv $(VENV)
+
+run:
+	$(PYTHON) $(SRC)/app.py
 
 venv: $(VENV)/bin/python
 
@@ -28,3 +31,4 @@ check-requirements: install
 
 typecheck: install
 	$(PYTHON) -m mypy $(SRC)
+
