@@ -4,5 +4,5 @@ setup(
     name="ndfl",
     version="0.0.0",
     package_dir={"":"src"},
-    packeges=find_packages(where="src")
+    packages=find_packages(where="src")
 )
