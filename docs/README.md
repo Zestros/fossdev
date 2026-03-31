@@ -1,3 +1,15 @@
+## Разработка
+
+### До Make:
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+### После Make:
+make venv
+make install
+make check
+
 ## Virtual Environment
 Почему используется .venv/bin/python вместо activate:
 - Make не сохраняет shell

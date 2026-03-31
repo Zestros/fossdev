@@ -20,7 +20,7 @@ $(VENV)/bin/python:
 	python3 -m venv $(VENV)
 
 run: install
-	$(PYTHON) $(SRC)/app.py
+	$(PYTHON) $(SRC)/text_utils/app.py
 
 venv: $(VENV)/bin/python
 

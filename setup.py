@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="text-utils-lite_byMe",
+    name="text-utils-lite",
     version="0.1.0",
     description="Simple text utilities",
     author="My name and lastname",
