@@ -10,7 +10,7 @@ create-structure:
 	touch src/.gitkeep tests/.gitkeep
 
 install-dep:
-	pip install -r requiremment.txt
+	pip install -r requirement.txt
 
 install:
 	pip install -e .
