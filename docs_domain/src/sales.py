@@ -1,18 +1,17 @@
 # TODO refactor this module using buisness logic names
 
 
-def _row(x):
-    # x is one line from file
-    p = x.strip().split(",")  # split by comma
-    if len(p) != 4:  # if line is bad
+def _parse_record(line: str):
+    p = line.strip().split(",")
+    if len(p) != 4:  # according specc. each is defined by 4 field
         return None  # return nothing
 
-    n = p[0]  # product name
-    c = p[1]  # product category
-    a = float(p[2])  # price of one item
-    q = int(p[3])  # amount of items
+    product_name = p[0] 
+    category = p[1] 
+    unit_price = float(p[2])
+    quantity = int(p[3])
 
-    return {"n": n, "c": c, "a": a, "q": q}  # make dict
+    return {"n": product_name, "c": category, "a": unit_price, "q": quantity}  # make dict
 
 
 def read_data(path):
