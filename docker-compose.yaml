@@ -6,15 +6,27 @@ services:
     networks:
       - services-net
 
+  discount-service:
+    build: ./discount_service
+    ports:
+      - "8003:8000"
+    environment:
+      REDIS_URL: redis://redis:6379
+    networks:
+      - services-net
+
   order-service:
     build: ./order_service
     ports:
       - "8002:8000"
     environment:
       PRODUCT_SERVICE_URL: http://product-service:8000
+      DISCOUNT_SERVICE_URL: http://discount-service:8000
       DATABASE_URL: postgresql://app:app@db:5432/orders
     depends_on:
       product-service:
+        condition: service_started
+      discount-service:
         condition: service_started
       db:
         condition: service_healthy
@@ -36,6 +48,10 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - services-net
+  redis:
+    image: redis:7
     networks:
       - services-net
 
