@@ -11,6 +11,8 @@ from .database import get_order, init_db, save_order
 from .settings import get_settings
 
 
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
@@ -21,22 +23,21 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-
-PRODUCT_SERVICE_URL = os.getenv(
-    "PRODUCT_SERVICE_URL",
-    "http://127.0.0.1:8001",
-)
-
+settings = get_settings()
 
 class OrderRequest(BaseModel):
     product_id: str
     quantity: int = Field(gt=0)
+    promo_code: str | None = None
 
 
 class OrderResponse(BaseModel):
     product_id: str
     quantity: int
     unit_price: float
+    subtotal: float
+    discount_percent: float
+    discount_amount: float
     total: float
 
 
@@ -45,6 +46,9 @@ class StoredOrderResponse(BaseModel):
     product_id: str
     quantity: int
     unit_price: float
+    subtotal: float
+    discount_percent: float
+    discount_amount: float
     total: float
     created_at: datetime
 
@@ -54,6 +58,10 @@ class ProductFromService(BaseModel):
     name: str
     price: float
     available: bool
+
+class DiscountResponse(BaseModel):
+    discount_percent: float
+    reason: str
 
 
 @app.get("/health")
@@ -71,13 +79,27 @@ async def create_order(order: OrderRequest) -> OrderResponse:
             detail=f"Product '{order.product_id}' is not available",
         )
 
-    total = product.price * order.quantity
+    subtotal = product.price * order.quantity
+    discount = await fetch_discount(
+        product_id=product.id,
+        quantity=order.quantity,
+        unit_price=product.price,
+        promo_code=order.promo_code,
+    )
+    
+    discount_amount = subtotal * (discount.discount_percent / 100)
+
+    total = subtotal - discount_amount
 
     order_id = save_order(
         {
             "product_id": product.id,
             "quantity": order.quantity,
             "unit_price": product.price,
+
+            "subtotal": subtotal,
+            "discount_percent": discount.discount_percent,
+            "discount_amount": discount_amount,
             "total": total,
         }
     )
@@ -86,6 +108,10 @@ async def create_order(order: OrderRequest) -> OrderResponse:
         product_id=product.id,
         quantity=order.quantity,
         unit_price=product.price,
+
+        subtotal=subtotal,
+        discount_percent=discount.discount_percent,
+        discount_amount=discount_amount,
         total=total,
     )
 
@@ -104,6 +130,9 @@ def read_order(order_id: int) -> StoredOrderResponse:
         product_id=saved_order["product_id"],
         quantity=saved_order["quantity"],
         unit_price=float(saved_order["unit_price"]),
+        subtotal=float(saved_order["subtotal"]),
+        discount_percent=float(saved_order["discount_percent"]),
+        discount_amount=float(saved_order["discount_amount"]),
         total=float(saved_order["total"]),
         created_at=saved_order["created_at"],
     )
@@ -111,7 +140,7 @@ def read_order(order_id: int) -> StoredOrderResponse:
 
 
 async def fetch_product(product_id: str) -> ProductFromService:
-    url = f"{PRODUCT_SERVICE_URL}/products/{product_id}"
+    url = f"{settings.product_service_url}/products/{product_id}"
 
     try:
         async with httpx.AsyncClient(timeout=3.0) as client:
@@ -136,3 +165,40 @@ async def fetch_product(product_id: str) -> ProductFromService:
         )
 
     return ProductFromService.model_validate(response.json())
+
+
+async def fetch_discount(
+    product_id: str,
+    quantity: int,
+    unit_price: float,
+    promo_code: str | None = None,
+) -> DiscountResponse:
+
+    url = f"{settings.discount_service_url}/discounts/calculate"
+
+    try:
+        async with httpx.AsyncClient(timeout=3.0) as client:
+            response = await client.post(
+                url,
+                json={
+                    "product_id": product_id,
+                    "quantity": quantity,
+                    "price_per_item": unit_price,
+                    "promo_code": promo_code,
+                },
+            )
+
+    except httpx.RequestError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Discount service is unavailable: {exc}",
+        ) from exc
+
+    if response.status_code >= 400:
+        raise HTTPException(
+            status_code=502,
+            detail="Discount service returned an unexpected error",
+        )
+
+    return DiscountResponse.model_validate(response.json())
+

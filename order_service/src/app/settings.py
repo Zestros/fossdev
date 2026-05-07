@@ -15,6 +15,10 @@ def get_settings() -> Settings:
             "PRODUCT_SERVICE_URL",
             "http://127.0.0.1:8001",
         ),
+        discount_service_url=os.getenv(
+            "DISCOUNT_SERVICE_URL",
+            "http://127.0.0.1:8002",
+        ),
         database_url=os.getenv(
             "DATABASE_URL",
             "postgresql://app:app@127.0.0.1:5432/orders",
