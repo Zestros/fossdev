@@ -13,6 +13,9 @@ CREATE TABLE IF NOT EXISTS orders (
     product_id TEXT NOT NULL,
     quantity INTEGER NOT NULL CHECK (quantity > 0),
     unit_price NUMERIC(10, 2) NOT NULL,
+    subtotal NUMERIC(10, 2) NOT NULL,
+    discount_percent NUMERIC(10, 2),
+    discount_amount NUMERIC(10, 2),
     total NUMERIC(10, 2) NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -44,12 +47,18 @@ def save_order(
                     product_id,
                     quantity,
                     unit_price,
+                    subtotal,
+                    discount_percent,
+                    discount_amount,
                     total
                 )
                 VALUES (
                     %(product_id)s,
                     %(quantity)s,
                     %(unit_price)s,
+                    %(subtotal)s,
+                    %(discount_percent)s,
+                    %(discount_amount)s,
                     %(total)s
                 )
                 RETURNING id;
@@ -76,6 +85,9 @@ def get_order(
                     product_id,
                     quantity,
                     unit_price,
+                    subtotal,
+                    discount_percent,
+                    discount_amount,
                     total,
                     created_at
                 FROM orders
