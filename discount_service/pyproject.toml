@@ -1,0 +1,22 @@
+[project]
+name = "discount-service"
+version = "0.01"
+description = "Application for discount service in stupid docker"
+authors = [
+    {name = "Zestros",email = "dardanel2006dan@mail.ru"}
+]
+license = "MIT"
+readme = "README.md"
+requires-python = "^3.12"
+dependencies = [
+    "pydantic (>=2.13.4,<3.0.0)",
+    "uvicorn[standard] (>=0.46.0,<0.47.0)",
+    "fastapi (>=0.136.1,<0.137.0)",
+    "psycopg[binary] (>=3.3.4,<4.0.0)",
+    "redis (>=7.4.0,<8.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
